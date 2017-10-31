@@ -1,0 +1,9 @@
+This file is a description about what the sub-directories mean in the directory ./code.
+./code/chris-frontend contains the codes for implementing the frontend business flow in JavaScript.
+./code/song-sql-python contains the codes for implementing the database operations in a popular ORM framework in python.
+./code/xie-server-python is about the details of the implementation of backend server.
+./code/xie-image-java is about how to play with puzzles and images.
+
+All the code should be downloaded and updated on time.
+Please remember download the code first when you try to update your code.
+Finally, wish us have a nice school life!
