@@ -1,48 +1,73 @@
 html, body{
-  height: 99%;
+  height: 100%;
   width: 100%;
-  overflow: hidden;
   text-align: center;
+  overflow: hidden;
+  background-color: #F5F5F5;
 }
 
 .p-container {
   width: 100%;
-  height: 90%;
+  height: 95%;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.row-container {
+  width: 100%;
+  height: 50%;
+  padding-left: 3%;
+  text-align: center;
 }
 
 .sub-container {
   width: 30%;
-  height: 45%;
-  border-width: 1px;
-  border-color: black;
-  border-style: solid;
+  height: 95%;
   float: left;
   margin-top: 1%;
   text-align: center;
+  background-color: #9E9E9E;
+  box-shadow:0 0 10px;
 }
 
 .mid-sub-container {
-  margin-left: 3%;
-  margin-right: 3%;
+  margin-left: 1%;
+  margin-right: 1%;
+}
+
+.img-container {
+  width: 90%;
+  height: 80%;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 5%;
+  box-shadow:0 0 10px #F5F5F5;
+  /*border-width: 1px;
+  border-color: black;
+  border-style: solid;*/
+}
+
+img {
+  height: 100%;
+  width: 100%;
 }
 
 .btm-container {
   width: 100%;
-  text-align: center;
+  height: 13%;
 }
 
+button {
+  margin-top: 2%;
+  width: 15%;
+  height: 65%;
+  border-width: 0;
+  border-radius: 15%;
+  background-color: #F5F5F5;
+}
 .copy-right {
+  color:
 }
 
 .btn-click {
-}
-
-
-img {
-  height: 80%;
-  width: 90%;
-  margin: 5% 5% 0 5%;
-  border-width: 1px;
-  border-color: black;
-  border-style: solid;
 }
