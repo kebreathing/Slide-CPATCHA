@@ -1,0 +1,77 @@
+/**
+* author: Chris Long
+* Created at 2017/12/12 22:30
+* For Assignment of ISE
+*/
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.container {
+  margin: 0 auto;
+  position: relative;
+  top: 3%;
+  width: 95%;
+  height: 90%;
+  background-color: grey;
+}
+
+.left-container {
+  float: left;
+  width: 20%;
+  height: 80%;
+  background-color: #616161;
+}
+
+.thumbnails-container {
+  margin: 0 auto;
+  margin-top: 3%;
+  width: 90%;
+  height: 95%;
+  background-color: white;
+  text-align: center;
+}
+
+.thumbnails-selected {
+  top: 0;
+  left: 0;
+  z-index: 0;
+  display: none;
+}
+
+.thumbnails-default {
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.thumbnails {
+  width: 100px;
+  height: 100px;
+}
+
+.subpuzzle {
+  width: 200px;
+  height: 200px;
+}
+
+.tips {
+  margin-top: 3%;
+}
+
+.right-container{
+  float: left;
+  width: 80%;
+  height: 80%;
+  background-color: #9E9E9E;
+}
+
+.btm-container {
+  float: left;
+  width: 100%;
+  height: 20%;
+  background-color: #757575;
+}

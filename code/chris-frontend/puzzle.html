@@ -1,0 +1,91 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="author" content="Chris Long" />
+  <meta name="revised" content="Chris, 2017/12/12" />
+  <meta name="application-name" content="SLIDE_CAPTCHA" />
+  <meta name="description" content="Slide CAPTCHA in I.S.E" />
+  <meta http-equiv="refresh" content="300" />
+  <meta http-equiv="content-type" content="text/html" />
+  <script src="./js/jquery-3.2.1.min.js"></script>
+  <script src="./js/puzzle.js"></script>
+  <link rel="stylesheet" type="text/css" href="./css/puzzle.css" />
+</head>
+
+<body>
+  <div class="container">
+    <!-- Begin : sub-puzzle-->
+    <!--
+     展示所有的子拼图， 选择正确的子拼图缩影图后，放大显示子拼图
+     用户拖动放大的子拼图道指定位置
+    -->
+    <div class="left-container">
+      <table width="100%" class="thumbnails-container">
+        <tbody width="100%">
+          <tr height="20%">
+            <td width="50%">
+              <div class="thumbnails-selected">
+                <img class="thumbnails" src="./img/loading.gif" />
+              </div>
+              <div class="thumbnails-default">
+                <img class="thumbnails" src="./img/loading.gif" />
+              </div>
+            </td>
+            <td width="50%">
+              <div class="thumbnails-selected">
+                <img class="thumbnails" src="./img/loading.gif" />
+              </div>
+              <div class="thumbnails-default">
+                <img class="thumbnails" src="./img/loading.gif" />
+              </div>
+            </td>
+          </tr>
+          <tr height="20%">
+            <td width="50%">
+              <div class="thumbnails-selected">
+                <img class="thumbnails" src="./img/loading.gif" />
+              </div>
+              <div class="thumbnails-default">
+                <img class="thumbnails" src="./img/loading.gif" />
+              </div>
+            </td>
+            <td width="50%">
+              <div class="thumbnails-selected">
+                <img class="thumbnails" src="./img/loading.gif" />
+              </div>
+              <div class="thumbnails-default">
+                <img class="thumbnails" src="./img/loading.gif" />
+              </div>
+            </td>
+          </tr>
+          <!-- End: thumbnails -->
+          <tr height="60%">
+            <td width="100%" colspan="2">
+              <img class="subpuzzle" src="./img/loading.gif" />
+              <div class="tips">
+                <label><font>Drag your puzzle!</font></label>
+              </div>
+            </td>
+
+          </tr>
+          <!-- End: Sub-Puzzle -->
+        </tbody>
+      </table>
+    </div>
+    <!-- End : sub-puzzle-->
+    <!-- Begin : whole puzzle-->
+    <div class="right-container">
+    </div>
+    <!-- End : whole puzzle-->
+
+    <!-- Begin : btm-puzzle-->
+    <!--
+      文本显示已选择拼图，记录相关鼠标移动坐标
+      记录用时，及关键数据
+    -->
+    <div class="btm-container">
+    </div>
+    <!-- End : btm-puzzle---->
+  </div>
+</body>

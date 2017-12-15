@@ -12,6 +12,16 @@ function bindEvent(){
   // Get all the instances of buttons
   $("button").click(function() {
     console.log(this.id)
+  });
+
+  $("#warning404").click(function(){
+    // 如果网络出现问题，会出现此框
+    // 重新发出请求后，成功则消失，失败则继续出现
+    var display = $("#warning404").css('display')
+    if(display == "block"){
+      $("#block").hide()
+      // TODO: Request the images again.
+    }
   })
 }
 
@@ -26,6 +36,11 @@ function defaultBKG(){
   for(var i  = 0; i < imgs.length; i++){
     $('#' + imgs[i].id).attr('src', defaultImgs[i]);
   }
+}
+
+// 点击消失错误提示
+function disappear404(){
+
 }
 
 $(document).ready(function(){
