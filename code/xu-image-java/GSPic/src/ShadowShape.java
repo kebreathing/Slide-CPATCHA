@@ -18,9 +18,9 @@ public class ShadowShape {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		String a="D:\\slidePic\\PICS\\pic-00000700.jpg";
-		String b="D:\\slidePic\\SHADOW/pic-00000701.";
-		String c="D:\\slidePic\\PIECE/pic-00000700-1.";
+		String a="D:\\slidePic\\PICS\\pic-00001000.jpg";
+		String b="D:\\slidePic\\SHADOW/pic-00001001.";
+		String c="D:\\slidePic\\PIECE/pic-00001000-1.";
 		try {
 			new ShadowShape().MShadowShape(a,b,c);
 		} catch (IOException e) {
@@ -30,6 +30,7 @@ public class ShadowShape {
 		
 	}
 	private Shape shape;
+	private Shape shapeSwitch;
 	private Shape falseShape;
 	private int rule;
 	private float alpha;
@@ -50,9 +51,12 @@ public class ShadowShape {
 		
 		File baseFile = new File(baseFilePathIn);
 		File shadowFile = new File(baseFilePathOutShadow + picType);
-	    File pieceFile = new File(baseFilePathOutPiece + picPieceType);
+	    File pieceFile = new File(baseFilePathOutPiece + picPieceType); 
+	    String tmp=baseFilePathOutPiece.replace("-1", "-2");
+	    File pieceFileSwitch = new File(tmp + picPieceType);
 	    getpiecePathPic=baseFilePathOutPiece.replace("/", "\\");
 	    File getPieceFile = new File(getpiecePathPic + picPieceType);
+	    File getPieceFileSwitch = new File(tmp.replace("/", "\\") + picPieceType);
 	    ratio = 1;  //比例参数，更改调整阴影区大小
 	    
 	    //图片读入
@@ -69,7 +73,9 @@ public class ShadowShape {
 		
 		//System.out.println(spin);//only for testing
 		DShape fS=new DShape();
-		shape = fS.drawShape(sh_x, sh_y, spin,ratio);
+		fS.drawShape(sh_x, sh_y, spin,ratio);
+		shape=fS.getRightShape();
+		shapeSwitch=fS.getFalseShape();
 		
 		//画出假的阴影区形状,结果为falseShape	
 		falseShape = fS.falseShape(sh_x, sh_y, pic_x, pic_y,ratio);
@@ -89,6 +95,18 @@ public class ShadowShape {
 		g3.drawImage(bi1,0,0,null);
 		g3.dispose();
 		ImageIO.write(buffImg, picPieceType, pieceFile);
+		
+		//剪切旋转后的图片碎片
+		BufferedImage buffImgf = new BufferedImage(bi1.getWidth(), bi1.getHeight(),
+                BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g4 = buffImgf.createGraphics();
+		g4.setComposite(AlphaComposite.Clear);
+		g4.fill(new Rectangle(buffImgf.getWidth(),buffImgf.getHeight()));
+		g4.setComposite(composite1);
+		g4.setClip(shapeSwitch);
+		g4.drawImage(bi1,0,0,null);
+		g4.dispose();
+		ImageIO.write(buffImgf, picPieceType, pieceFileSwitch);
 		
 		//读取图片，并进行大致的剪裁，减为一个小矩形
 		FileInputStream fis = null ;  
@@ -112,6 +130,22 @@ public class ShadowShape {
 		//输出剪裁后的图片碎片
 		ImageIO.write(bi, picPieceType, pieceFile);
 		
+		//剪裁旋转后的图片为一个矩形
+		fis = null ;  
+        iis =null ; 
+        
+		fis = new FileInputStream(getPieceFileSwitch); //读取图片文件   
+		Iterator<ImageReader> itf = ImageIO.getImageReadersByFormatName(picPieceType);    
+		ImageReader readerf = (ImageReader) itf.next();   
+         
+		iis = ImageIO.createImageInputStream(fis);//获取图片流      
+		readerf.setInput(iis,true) ;  
+		ImageReadParam paramf = readerf.getDefaultReadParam();   
+		 
+		paramf.setSourceRegion(rect);  //进行剪裁
+		BufferedImage bif = readerf.read(0,paramf);//提供一个 BufferedImage，将其用作解码像素数据的目标。   
+		ImageIO.write(bif, picPieceType, pieceFileSwitch);
+		
 		//读取图片，并打上阴影区，图片读入 见前
 		Graphics2D g2 = SImg.createGraphics();
 		rule=AlphaComposite.SRC_OVER;
@@ -120,10 +154,13 @@ public class ShadowShape {
 		g2.setComposite(composite);
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);   //使用 setRenderingHint 设置抗锯齿
 		
+		ImageIO.write(bi, picPieceType, pieceFile);
+		
+		//设置阴影颜色
 		int res=0;
 		res = bi.getRGB((int)(70*ratio), (int)(70*ratio)) & 0xFFFFFF;  //change ARGB into RGB,& 0xFFFFFF
 		//System.out.println(res);
-        int[] rgb = new int [3]; //set RGB, value of color
+		int[] rgb = new int [3]; //set RGB, value of color
         rgb[0] = (res & 0xff0000) >> 16;
         rgb[1] = (res & 0xff00) >> 8;
         rgb[2] = (res & 0xff);
@@ -150,6 +187,7 @@ public class ShadowShape {
         //System.out.println(rgb[0]);
         //System.out.println(rgb[1]);
         //System.out.println(rgb[2]);
+        
         Color color=new Color(rgb[0],rgb[1],rgb[2]);
 		g2.setPaint(color);//阴影区颜色设置
 		g2.fill(shape);
@@ -163,42 +201,63 @@ public class ShadowShape {
 	class DShape{
 		private double f_x;
 		private double f_y;
-		int spinf;
-		public Shape drawShape(double sh_x,double sh_y,int spin,double ratio) {
+		private Shape shapef;
+		private Shape shaper;
+		public void drawShape(double sh_x,double sh_y,int spin,double ratio) {
 			sh_x-=15*ratio;
 			sh_y-=15*ratio;
 			
 			Shape shape1 = new RoundRectangle2D.Double(15*ratio+sh_x,15*ratio+sh_y,80*ratio,80*ratio,20*ratio,20*ratio);
 			Area a=new Area(shape1);
+			Area b=new Area(shape1);
 			Area shape2 = new Area(new Ellipse2D.Double(25*ratio+sh_x, 0+sh_y, 30*ratio, 30*ratio));//上
 			Area shape3 = new Area(new Ellipse2D.Double(80*ratio+sh_x, 25*ratio+sh_y, 30*ratio, 30*ratio));//右
 			Area shape4 = new Area(new Ellipse2D.Double(0+sh_x, 55*ratio+sh_y, 30*ratio, 30*ratio));//左
 			Area shape5 = new Area(new Ellipse2D.Double(55*ratio+sh_x, 80*ratio+sh_y, 30*ratio, 30*ratio));//下
+			
 			switch(spin) {
 			case 0:
 				a.subtract(shape2);
 				a.add(shape3);
 				a.add(shape4);
 				a.subtract(shape5);
+				shaper=(Shape)a;
+				b.add(shape2);
+				b.subtract(shape3);
+				b.subtract(shape4);
+				b.add(shape5);
+				shapef=(Shape)b;
 				break;
 			case 1:
 				a.add(shape2);
 				a.subtract(shape3);
 				a.subtract(shape4);
 				a.add(shape5);
+				shaper=(Shape)a;
+				b.subtract(shape2);
+				b.add(shape3);
+				b.add(shape4);
+				b.subtract(shape5);
+				shapef=(Shape)b;
 				break;
 			default:
 			}
-			shape=(Shape)a;
-			return shape;
-			
 		}
+		
+		public Shape getRightShape() {
+			return shaper;
+		}
+		
+		public Shape getFalseShape() {
+			return shapef;
+		}
+		
 		public Shape falseShape(double sh_x,double sh_y,double pic_x,double pic_y,double ratio) {
 			
 			Random r=new Random();//设立假值
 			f_x=r.nextDouble()*(pic_x-200*ratio)+50*ratio;
 			f_y=r.nextDouble()*(pic_y-200*ratio)+50*ratio;
-			spinf=r.nextInt(2);//假值的旋转参数
+			int spinf=r.nextInt(2);//假值的旋转参数
 			
 			while((f_x<(sh_x+150*ratio))&&(f_x>(sh_y-150*ratio))&&(f_y<(sh_y+150*ratio))&&(f_y>(sh_y-150*ratio))) {
 				f_x=r.nextDouble()*(pic_x-200*ratio)+50*ratio;
