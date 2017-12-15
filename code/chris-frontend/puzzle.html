@@ -8,13 +8,15 @@
   <meta name="description" content="Slide CAPTCHA in I.S.E" />
   <meta http-equiv="refresh" content="300" />
   <meta http-equiv="content-type" content="text/html" />
+
   <script src="./js/jquery-3.2.1.min.js"></script>
+  <script src="./js/jquery-ui.min.js"></script>
   <script src="./js/puzzle.js"></script>
   <link rel="stylesheet" type="text/css" href="./css/puzzle.css" />
 </head>
 
 <body>
-  <div class="container">
+  <div class="container" id="container">
     <!-- Begin : sub-puzzle-->
     <!--
      展示所有的子拼图， 选择正确的子拼图缩影图后，放大显示子拼图
@@ -23,69 +25,59 @@
     <div class="left-container">
       <table width="100%" class="thumbnails-container">
         <tbody width="100%">
-          <tr height="20%">
+          <tr height="15%">
             <td width="50%">
-              <div class="thumbnails-selected">
-                <img class="thumbnails" src="./img/loading.gif" />
-              </div>
-              <div class="thumbnails-default">
-                <img class="thumbnails" src="./img/loading.gif" />
+              <div class="thumbnails-default" id="thumbnail_div1">
+                <img id="selected1" class="thumbnails selected" src="./img/selected.png" />
+                <img id="thumbnail1" class="thumbnails" src="./img/loading.gif" />
               </div>
             </td>
             <td width="50%">
-              <div class="thumbnails-selected">
-                <img class="thumbnails" src="./img/loading.gif" />
-              </div>
-              <div class="thumbnails-default">
-                <img class="thumbnails" src="./img/loading.gif" />
+              <div class="thumbnails-default" id="thumbnail_div2">
+                <img id="selected2" class="thumbnails selected" src="./img/selected.png" />
+                <img id="thumbnail2" class="thumbnails" src="./img/loading2.gif" />
               </div>
             </td>
           </tr>
-          <tr height="20%">
+          <tr height="15%">
             <td width="50%">
-              <div class="thumbnails-selected">
-                <img class="thumbnails" src="./img/loading.gif" />
-              </div>
-              <div class="thumbnails-default">
-                <img class="thumbnails" src="./img/loading.gif" />
+              <div class="thumbnails-default" id="thumbnail_div3">
+                <img id="selected3" class="thumbnails selected" src="./img/selected.png" />
+                <img id="thumbnail3" class="thumbnails" src="./img/loading3.gif" />
               </div>
             </td>
             <td width="50%">
-              <div class="thumbnails-selected">
-                <img class="thumbnails" src="./img/loading.gif" />
-              </div>
-              <div class="thumbnails-default">
-                <img class="thumbnails" src="./img/loading.gif" />
+              <div class="thumbnails-default" id="thumbnail_div4">
+                <img id="selected4" class="thumbnails selected" src="./img/selected.png" />
+                <img id="thumbnail4" class="thumbnails" src="./img/loading4.gif" />
               </div>
             </td>
           </tr>
           <!-- End: thumbnails -->
-          <tr height="60%">
+          <tr height="45%">
             <td width="100%" colspan="2">
-              <img class="subpuzzle" src="./img/loading.gif" />
+              <img id="puzzle" class="subpuzzle" src="./img/loading.gif" />
               <div class="tips">
                 <label><font>Drag your puzzle!</font></label>
               </div>
             </td>
-
           </tr>
           <!-- End: Sub-Puzzle -->
+
+          <tr height="10%">
+            <td colspan="2"><button id='resetBtn'> RESET </button></td>
+          </tr>
         </tbody>
       </table>
     </div>
     <!-- End : sub-puzzle-->
+
     <!-- Begin : whole puzzle-->
     <div class="right-container">
+      <div class="puzzle-container">
+        <img src='./img/pexels-photo-000004.jpeg' />
+      </div>
     </div>
     <!-- End : whole puzzle-->
-
-    <!-- Begin : btm-puzzle-->
-    <!--
-      文本显示已选择拼图，记录相关鼠标移动坐标
-      记录用时，及关键数据
-    -->
-    <div class="btm-container">
-    </div>
-    <!-- End : btm-puzzle---->
   </div>
 </body>
