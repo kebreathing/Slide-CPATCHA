@@ -18,8 +18,11 @@ public class ShadowShape {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
+		String a="D:\\slidePic\\PICS\\pic-00000700.jpg";
+		String b="D:\\slidePic\\SHADOW/pic-00000701.";
+		String c="D:\\slidePic\\PIECE/pic-00000700-1.";
 		try {
-			new ShadowShape();
+			new ShadowShape().MShadowShape(a,b,c);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -30,124 +33,48 @@ public class ShadowShape {
 	private Shape falseShape;
 	private int rule;
 	private float alpha;
-	private double sh_x;   //ÒõÓ°Çøx×ø±ê
-	private double sh_y;   //ÒõÓ°Çøy×ø±ê
-	private double f_x;
-	private double f_y;
-	private String baseFilePathIn="D:\\javaprojects\\pictures\\8761.jpg"; //Í¼Æ¬¶ÁÈëÂ·¾¶
-	private String baseFilePathOutShadow="D:\\javaprojects\\pictures\\shadow/b."; //´øÒõÓ°Í¼Æ¬Êä³öÂ·¾¶¼°Ãû³Æ
-	private String baseFilePathOutPiece="D:\\javaprojects\\pictures\\pieces/c."; //ËéÆ¬Í¼Æ¬Êä³öÂ·¾¶¼°Ãû³Æ
-	private String getpiecePathPic="D:\\javaprojects\\pictures\\pieces\\c.";
-	private double pic_x=700; //Í¼Æ¬³¤¿íÉèÖÃ
-	private double pic_y=500; //Í¼Æ¬³¤¿íÉèÖÃ
-	private int spin;   //Ğı×ª±êÊ¶£¬0»ò1
-	final String picType = "jpg";  //ÊäÈëÊä³öÍ¼Æ¬¸ñÊ½
-	final String picPieceType = "png";//Í¼Æ¬ËéÆ¬µÄ¸ñÊ½Ö»ÄÜÊÇpng
+	private double sh_x;   //é˜´å½±åŒºxåæ ‡
+	private double sh_y;   //é˜´å½±åŒºyåæ ‡
+	private double ratio;  //æ¯”ä¾‹å‚æ•°ï¼Œå¯¹ä¸åŒå›¾ç‰‡ï¼Œå°¤å…¶æ˜¯é«˜æ¸…å›¾ç‰‡å¯ä»¥è°ƒæ•´é˜´å½±åŒºçš„å¤§å°
+	//private String baseFilePathIn="D:\\javaprojects\\pictures\\8761.jpg"; //å›¾ç‰‡è¯»å…¥è·¯å¾„
+	//private String baseFilePathOutShadow="D:\\javaprojects\\pictures\\shadow/b."; //å¸¦é˜´å½±å›¾ç‰‡è¾“å‡ºè·¯å¾„åŠåç§°
+	//private String baseFilePathOutPiece="D:\\javaprojects\\pictures\\pieces/c."; //ç¢ç‰‡å›¾ç‰‡è¾“å‡ºè·¯å¾„åŠåç§°
+	private String getpiecePathPic;  //example:getpiecePathPic="D:\\javaprojects\\pictures\\pieces\\c.";
+	private double pic_x; //å›¾ç‰‡é•¿å®½è®¾ç½®
+	private double pic_y; //å›¾ç‰‡é•¿å®½è®¾ç½®
+	private int spin;   //æ—‹è½¬æ ‡è¯†ï¼Œ0æˆ–1
+	final String picType = "jpeg";  //è¾“å…¥è¾“å‡ºå›¾ç‰‡æ ¼å¼
+	final String picPieceType = "png";//å›¾ç‰‡ç¢ç‰‡çš„æ ¼å¼åªèƒ½æ˜¯png
 	
-	public ShadowShape() throws IOException{
+	public void MShadowShape(String baseFilePathIn,String baseFilePathOutShadow,String baseFilePathOutPiece) throws IOException{
 		
 		File baseFile = new File(baseFilePathIn);
 		File shadowFile = new File(baseFilePathOutShadow + picType);
 	    File pieceFile = new File(baseFilePathOutPiece + picPieceType);
+	    getpiecePathPic=baseFilePathOutPiece.replace("/", "\\");
 	    File getPieceFile = new File(getpiecePathPic + picPieceType);
+	    ratio = 1;  //æ¯”ä¾‹å‚æ•°ï¼Œæ›´æ”¹è°ƒæ•´é˜´å½±åŒºå¤§å°
 	    
-	    //Í¼Æ¬¶ÁÈë
+	    //å›¾ç‰‡è¯»å…¥
 	    BufferedImage SImg = null;
 		SImg = ImageIO.read(baseFile);
 		pic_x=SImg.getWidth();
 		pic_y=SImg.getHeight();
 			
-		//»­³öÒõÓ°ÇøËéÆ¬ĞÎ×´£¬²¢Éú³ÉËæ»ú×ø±êx,yÒÔ¼°Ëæ»úĞı×ª±êÊ¶0»ò1£¬×îºó½á¹ûÎªµÃµ½shape
+		//ç”»å‡ºé˜´å½±åŒºç¢ç‰‡å½¢çŠ¶ï¼Œå¹¶ç”Ÿæˆéšæœºåæ ‡x,yä»¥åŠéšæœºæ—‹è½¬æ ‡è¯†spin=0æˆ–1ï¼Œæœ€åç»“æœä¸ºå¾—åˆ°shape
 		Random r=new Random();
-		sh_x=r.nextDouble()*(pic_x-100)+50;//·¶Î§ÊÇ50¡ª¡ªpic_x-50
-		sh_y=r.nextDouble()*(pic_y-100)+50;//·¶Î§ÊÇ50¡ª¡ªpic_y-50
+		sh_x=r.nextDouble()*(pic_x-200*ratio)+50*ratio;//scale is 50â€”â€”pic_x-150
+		sh_y=r.nextDouble()*(pic_y-200*ratio)+50*ratio;//scale is 50â€”â€”pic_y-150
 		spin=r.nextInt(2);
 		
-		if(sh_x>pic_x/2) {  //ÉèÁ¢¼ÙÖµ
-			f_x=r.nextDouble()*(pic_x/2-70)+50;//ÈôÒõÓ°ÇøÔÚÍ¼ÓÒ±ß£¬¼ÙÒõÓ°ÇøÔÚÍ¼×ó±ß£¬·¶Î§ÊÇ50¡ª¡ªpic_x/2-20
-		}
-		else {
-			f_x=r.nextDouble()*(pic_x/2-70)+pic_x/2+20;//Í¬ÉÏ
-		}
+		//System.out.println(spin);//only for testing
+		DShape fS=new DShape();
+		shape = fS.drawShape(sh_x, sh_y, spin,ratio);
 		
-		if(sh_y>pic_y/2) {  //ÉèÁ¢¼ÙÖµ
-			f_y=r.nextDouble()*(pic_y/2-70)+50;//ÈôÒõÓ°ÇøÔÚÍ¼ÏÂ±ß£¬¼ÙÒõÓ°ÇøÔÚÍ¼ÉÏ±ß£¬·¶Î§ÊÇ50¡ª¡ªpic_y/2-20
-		}
-		else {
-			f_y=r.nextDouble()*(pic_y/2-70)+pic_y/2+20;//Í¬ÉÏ
-		}
+		//ç”»å‡ºå‡çš„é˜´å½±åŒºå½¢çŠ¶,ç»“æœä¸ºfalseShape	
+		falseShape = fS.falseShape(sh_x, sh_y, pic_x, pic_y,ratio);
 		
-		//½ö²âÊÔÓÃ
-		//System.out.println(spin);
-		
-		Shape shape1 = new RoundRectangle2D.Double(15+sh_x,15+sh_y,80,80,20,20);
-		Area a=new Area(shape1);
-		Area shape2 = new Area(new Ellipse2D.Double(25+sh_x, 0+sh_y, 30, 30));//ÉÏ
-		Area shape3 = new Area(new Ellipse2D.Double(80+sh_x, 25+sh_y, 30, 30));//ÓÒ
-		Area shape4 = new Area(new Ellipse2D.Double(0+sh_x, 55+sh_y, 30, 30));//×ó
-		Area shape5 = new Area(new Ellipse2D.Double(55+sh_x, 80+sh_y, 30, 30));//ÏÂ
-		switch(spin) {
-		case 0:
-			a.subtract(shape2);
-			a.add(shape3);
-			a.add(shape4);
-			a.subtract(shape5);
-			break;
-		case 1:
-			a.add(shape2);
-			a.subtract(shape3);
-			a.subtract(shape4);
-			a.add(shape5);
-			break;
-		default:
-		}
-		shape=(Shape)a;
-		
-		//»­³ö¼ÙµÄÒõÓ°ÇøĞÎ×´,½á¹ûÎªfalseShape	
-		Shape shapef1 = new RoundRectangle2D.Double(15+f_x,15+f_y,80,80,20,20);
-		Area b=new Area(shapef1);
-		Area shapef2 = new Area(new Ellipse2D.Double(25+f_x, 0+f_y, 30, 30));//ÉÏ
-		Area shapef3 = new Area(new Ellipse2D.Double(80+f_x, 25+f_y, 30, 30));//ÓÒ
-		Area shapef4 = new Area(new Ellipse2D.Double(0+f_x, 55+f_y, 30, 30));//×ó
-		Area shapef5 = new Area(new Ellipse2D.Double(55+f_x, 80+f_y, 30, 30));//ÏÂ
-		spin=(spin==1)?0:1;
-		switch(spin) {
-		case 0:
-			b.subtract(shapef2);
-			b.add(shapef3);
-			b.add(shapef4);
-			b.subtract(shapef5);
-			break;
-		case 1:
-			b.add(shapef2);
-			b.subtract(shapef3);
-			b.subtract(shapef4);
-			b.add(shapef5);
-			break;
-		default:
-		}
-		falseShape=(Shape)b;
-		
-		
-		//¶ÁÈ¡Í¼Æ¬£¬²¢´òÉÏÒõÓ°Çø£¬Í¼Æ¬¶ÁÈë ¼ûÇ°Ãæ¿ªÊ¼
-		Graphics2D g2 = SImg.createGraphics();
-		
-		rule=AlphaComposite.SRC_OVER;
-		alpha= 0.7f;  //ÒõÓ°ÇøÍ¸Ã÷¶ÈÉèÖÃ
-		AlphaComposite composite=AlphaComposite.getInstance(rule, alpha);
-		g2.setComposite(composite);
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);   //Ê¹ÓÃ setRenderingHint ÉèÖÃ¿¹¾â³İ
-		g2.setPaint(Color.WHITE);//ÒõÓ°ÇøÑÕÉ«ÉèÖÃ
-		g2.fill(shape);
-		
-		//´òÉÏ¼ÙµÄÒõÓ°Çø
-		g2.fill(falseShape);
-
-		g2.dispose();
-		ImageIO.write(SImg, picType, shadowFile);
-		        
-		//½«¼ô²ÃÍ¼ĞÎ£¬shapeĞÎ×´Ö®ÍâµÄ²¿·ÖÉèÖÃÎªÍ¸Ã÷
-		//shape=(Shape)a;
+		//å°†å‰ªè£å›¾å½¢ï¼Œshapeå½¢çŠ¶ä¹‹å¤–çš„éƒ¨åˆ†è®¾ç½®ä¸ºé€æ˜
 		BufferedImage bi1 = ImageIO.read(new File(baseFilePathIn)); 
 		BufferedImage buffImg = new BufferedImage(bi1.getWidth(), bi1.getHeight(),
                 BufferedImage.TYPE_INT_ARGB);
@@ -163,27 +90,147 @@ public class ShadowShape {
 		g3.dispose();
 		ImageIO.write(buffImg, picPieceType, pieceFile);
 		
-		//¶ÁÈ¡Í¼Æ¬£¬²¢½øĞĞ´óÖÂµÄ¼ô²Ã£¬¼õÎªÒ»¸öĞ¡¾ØĞÎ
+		//è¯»å–å›¾ç‰‡ï¼Œå¹¶è¿›è¡Œå¤§è‡´çš„å‰ªè£ï¼Œå‡ä¸ºä¸€ä¸ªå°çŸ©å½¢
 		FileInputStream fis = null ;  
         ImageInputStream iis =null ; 
         
-		fis = new FileInputStream(getPieceFile); //¶ÁÈ¡Í¼Æ¬ÎÄ¼ş 
+		fis = new FileInputStream(getPieceFile); //è¯»å–å›¾ç‰‡æ–‡ä»¶ 
 		Iterator<ImageReader> it = ImageIO.getImageReadersByFormatName(picPieceType);    
 		ImageReader reader = (ImageReader) it.next();   
          
-		iis = ImageIO.createImageInputStream(fis);//»ñÈ¡Í¼Æ¬Á÷      
+		iis = ImageIO.createImageInputStream(fis);//è·å–å›¾ç‰‡æµ      
 		reader.setInput(iis,true) ;  
 		ImageReadParam param = reader.getDefaultReadParam();   
 
-		int R_x=(int)sh_x;
-		int R_y=(int)sh_y;
+		int R_x=(int)(sh_x-15*ratio);
+		int R_y=(int)(sh_y-15*ratio);
 		
-		Rectangle rect = new Rectangle(R_x, R_y, 120, 120);//¶¨ÒåÒ»¸ö¾ØĞÎ    
-		param.setSourceRegion(rect);  //½øĞĞ¼ô²Ã
-		BufferedImage bi = reader.read(0,param);//Ìá¹©Ò»¸ö BufferedImage£¬½«ÆäÓÃ×÷½âÂëÏñËØÊı¾İµÄÄ¿±ê¡£   
+		Rectangle rect = new Rectangle(R_x, R_y, (int)(120*ratio), (int)(120*ratio));//å®šä¹‰ä¸€ä¸ªçŸ©å½¢    
+		param.setSourceRegion(rect);  //è¿›è¡Œå‰ªè£
+		BufferedImage bi = reader.read(0,param);//æä¾›ä¸€ä¸ª BufferedImageï¼Œå°†å…¶ç”¨ä½œè§£ç åƒç´ æ•°æ®çš„ç›®æ ‡ã€‚   
 		
-		//Êä³ö¼ô²ÃºóµÄÍ¼Æ¬ËéÆ¬
+		//è¾“å‡ºå‰ªè£åçš„å›¾ç‰‡ç¢ç‰‡
 		ImageIO.write(bi, picPieceType, pieceFile);
+		
+		//è¯»å–å›¾ç‰‡ï¼Œå¹¶æ‰“ä¸Šé˜´å½±åŒºï¼Œå›¾ç‰‡è¯»å…¥ è§å‰
+		Graphics2D g2 = SImg.createGraphics();
+		rule=AlphaComposite.SRC_OVER;
+		alpha= 0.7f;  //é˜´å½±åŒºé€æ˜åº¦è®¾ç½®
+		AlphaComposite composite=AlphaComposite.getInstance(rule, alpha);
+		g2.setComposite(composite);
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);   //ä½¿ç”¨ setRenderingHint è®¾ç½®æŠ—é”¯é½¿
+		
+		int res=0;
+		res = bi.getRGB((int)(70*ratio), (int)(70*ratio)) & 0xFFFFFF;  //change ARGB into RGB,& 0xFFFFFF
+		//System.out.println(res);
+        int[] rgb = new int [3]; //set RGB, value of color
+        rgb[0] = (res & 0xff0000) >> 16;
+        rgb[1] = (res & 0xff00) >> 8;
+        rgb[2] = (res & 0xff);
+
+        if(rgb[0]<0) {
+        	rgb[0]=0;
+        }
+        else if(rgb[0]>255) {
+        	rgb[0]=255;
+        }
+        if(rgb[1]<0) {
+        	rgb[1]=0;
+        }
+        else if(rgb[1]>255) {
+        	rgb[1]=255;
+        }
+        if(rgb[2]<0) {
+        	rgb[0]=0;
+        }
+        else if(rgb[0]>255) {
+        	rgb[0]=255;
+        }
+        //only for testing
+        //System.out.println(rgb[0]);
+        //System.out.println(rgb[1]);
+        //System.out.println(rgb[2]);
+        Color color=new Color(rgb[0],rgb[1],rgb[2]);
+		g2.setPaint(color);//é˜´å½±åŒºé¢œè‰²è®¾ç½®
+		g2.fill(shape);
+		
+		//æ‰“ä¸Šå‡çš„é˜´å½±åŒº
+		g2.fill(falseShape);
+		g2.dispose();
+		ImageIO.write(SImg, picType, shadowFile);
+	}
+	
+	class DShape{
+		private double f_x;
+		private double f_y;
+		int spinf;
+		public Shape drawShape(double sh_x,double sh_y,int spin,double ratio) {
+			sh_x-=15*ratio;
+			sh_y-=15*ratio;
+			
+			Shape shape1 = new RoundRectangle2D.Double(15*ratio+sh_x,15*ratio+sh_y,80*ratio,80*ratio,20*ratio,20*ratio);
+			Area a=new Area(shape1);
+			Area shape2 = new Area(new Ellipse2D.Double(25*ratio+sh_x, 0+sh_y, 30*ratio, 30*ratio));//ä¸Š
+			Area shape3 = new Area(new Ellipse2D.Double(80*ratio+sh_x, 25*ratio+sh_y, 30*ratio, 30*ratio));//å³
+			Area shape4 = new Area(new Ellipse2D.Double(0+sh_x, 55*ratio+sh_y, 30*ratio, 30*ratio));//å·¦
+			Area shape5 = new Area(new Ellipse2D.Double(55*ratio+sh_x, 80*ratio+sh_y, 30*ratio, 30*ratio));//ä¸‹
+			switch(spin) {
+			case 0:
+				a.subtract(shape2);
+				a.add(shape3);
+				a.add(shape4);
+				a.subtract(shape5);
+				break;
+			case 1:
+				a.add(shape2);
+				a.subtract(shape3);
+				a.subtract(shape4);
+				a.add(shape5);
+				break;
+			default:
+			}
+			shape=(Shape)a;
+			return shape;
+			
+		}
+		public Shape falseShape(double sh_x,double sh_y,double pic_x,double pic_y,double ratio) {
+			
+			Random r=new Random();//è®¾ç«‹å‡å€¼
+			f_x=r.nextDouble()*(pic_x-200*ratio)+50*ratio;
+			f_y=r.nextDouble()*(pic_y-200*ratio)+50*ratio;
+			spinf=r.nextInt(2);//å‡å€¼çš„æ—‹è½¬å‚æ•°
+			
+			while((f_x<(sh_x+150*ratio))&&(f_x>(sh_y-150*ratio))&&(f_y<(sh_y+150*ratio))&&(f_y>(sh_y-150*ratio))) {
+				f_x=r.nextDouble()*(pic_x-200*ratio)+50*ratio;
+				f_y=r.nextDouble()*(pic_y-200*ratio)+50*ratio;
+			}
+			f_x-=15*ratio;
+			f_y-=15*ratio;	
+			Shape shapef1 = new RoundRectangle2D.Double(15*ratio+f_x,15*ratio+f_y,80*ratio,80*ratio,20*ratio,20*ratio);
+			Area b=new Area(shapef1);
+			Area shapef2 = new Area(new Ellipse2D.Double(25*ratio+f_x, 0+f_y, 30*ratio, 30*ratio));//ä¸Š
+			Area shapef3 = new Area(new Ellipse2D.Double(80*ratio+f_x, 25*ratio+f_y, 30*ratio, 30*ratio));//å³
+			Area shapef4 = new Area(new Ellipse2D.Double(0+f_x, 55*ratio+f_y, 30*ratio, 30*ratio));//å·¦
+			Area shapef5 = new Area(new Ellipse2D.Double(55*ratio+f_x, 80*ratio+f_y, 30*ratio, 30*ratio));//ä¸‹
+			spinf=(spinf==1)?0:1;
+			switch(spinf) {
+			case 0:
+				b.subtract(shapef2);
+				b.add(shapef3);
+				b.add(shapef4);
+				b.subtract(shapef5);
+				break;
+			case 1:
+				b.add(shapef2);
+				b.subtract(shapef3);
+				b.subtract(shapef4);
+				b.add(shapef5);
+				break;
+			default:
+			}
+			falseShape=(Shape)b;
+			return falseShape;
+		}
 	}
 }
 
