@@ -12,6 +12,7 @@ function bindEvent(){
   // Get all the instances of buttons
   $("button").click(function() {
     console.log(this.id)
+    window.location.href = './puzzle.html'
   });
 
   $("#warning404").click(function(){

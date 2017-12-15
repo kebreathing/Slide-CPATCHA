@@ -26,6 +26,11 @@ function MouseListener(type, date, detailed) {
 // 子拼图缩略图选择监听
 function ThumbnailsListener() {
   $('.thumbnails-default').click(function() {
+    if(drag_status == true) {
+      // 拖动过程不可能更换图片
+      // 为了程序逻辑的完整性，还是要检查一下的
+      return;
+    }
     var date = new Date()
     var type = 'SelectThumbnails'
     var detailed = '';
@@ -63,13 +68,18 @@ function dragListener() {
   $('#puzzle').draggable({
     containment: '#container',
     start: function(){
+      drag_status = true;
       console.log('Drag start')
     },
     drag: function(){
       console.log('drag...')
+      // TODO: 记录鼠标具体事件变化
     },
     stop: function(){
+      drag_status = false;
       console.log('stop...')
+
+      // TODO: 记录鼠标结束事件，并且向服务器发送认证请求
     }
   });
 }

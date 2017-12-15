@@ -1,4 +1,4 @@
-html, body{
+html, body {
   height: 100%;
   width: 100%;
   text-align: center;
@@ -8,7 +8,7 @@ html, body{
 
 .not-found-404 {
   position: fixed;
-  display: block;
+  display: none;
   width: 100%;
   height: 100%;
 }
@@ -19,8 +19,8 @@ html, body{
   width: 100%;
   height: 100%;
   background: grey;
-  filter:alpha(Opacity=80);
-  -moz-opacity:0.5;
+  filter: alpha(Opacity=80);
+  -moz-opacity: 0.5;
   opacity: 0.5;
 }
 
@@ -32,7 +32,7 @@ html, body{
   position: relative;
   top: 30%;
   transform: translateY(-30%);
-  box-shadow:0 0 5px;
+  box-shadow: 0 0 5px;
   color: #F5F5F5;
   background-color: #9E9E9E;
 }
@@ -58,7 +58,7 @@ html, body{
   margin-top: 1%;
   text-align: center;
   background-color: #9E9E9E;
-  box-shadow:0 0 10px;
+  box-shadow: 0 0 10px;
 }
 
 .mid-sub-container {
@@ -72,7 +72,7 @@ html, body{
   margin-left: 5%;
   margin-right: 5%;
   margin-top: 5%;
-  box-shadow:0 0 10px #F5F5F5;
+  box-shadow: 0 0 10px #F5F5F5;
   /*border-width: 1px;
   border-color: black;
   border-style: solid;*/
@@ -86,19 +86,51 @@ img {
 .btm-container {
   width: 100%;
   height: 13%;
+  margin-top: 5px;
 }
 
 button {
-  margin-top: 2%;
-  width: 15%;
-  height: 65%;
-  border-width: 0;
-  border-radius: 15%;
-  background-color: #F5F5F5;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: white;
+  border: none;
+  color: #9E9E9E;
+  text-align: center;
+  font-size: 10px;
+  padding: 5px;
+  width: 100px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
 }
+
+button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+button span:after {
+  content: '»';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+button:hover span {
+  padding-right: 25px;
+}
+
+button:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
 .copy-right {
   color:
 }
 
-.btn-click {
-}
+.btn-click {}
