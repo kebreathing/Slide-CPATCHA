@@ -110,7 +110,7 @@ public class ShadowShape {
 		
 		//读取图片，并进行大致的剪裁，减为一个小矩形
 		FileInputStream fis = null ;  
-        ImageInputStream iis =null ; 
+        	ImageInputStream iis =null ; 
         
 		fis = new FileInputStream(getPieceFile); //读取图片文件 
 		Iterator<ImageReader> it = ImageIO.getImageReadersByFormatName(picPieceType);    
@@ -132,7 +132,7 @@ public class ShadowShape {
 		
 		//剪裁旋转后的图片为一个矩形
 		fis = null ;  
-        iis =null ; 
+        	iis =null ; 
         
 		fis = new FileInputStream(getPieceFileSwitch); //读取图片文件   
 		Iterator<ImageReader> itf = ImageIO.getImageReadersByFormatName(picPieceType);    
@@ -161,34 +161,34 @@ public class ShadowShape {
 		res = bi.getRGB((int)(70*ratio), (int)(70*ratio)) & 0xFFFFFF;  //change ARGB into RGB,& 0xFFFFFF
 		//System.out.println(res);
 		int[] rgb = new int [3]; //set RGB, value of color
-        rgb[0] = (res & 0xff0000) >> 16;
-        rgb[1] = (res & 0xff00) >> 8;
-        rgb[2] = (res & 0xff);
+        	rgb[0] = (res & 0xff0000) >> 16;
+        	rgb[1] = (res & 0xff00) >> 8;
+        	rgb[2] = (res & 0xff);
 
-        if(rgb[0]<0) {
+        	if(rgb[0]<0) {
         	rgb[0]=0;
-        }
-        else if(rgb[0]>255) {
+        	}
+        	else if(rgb[0]>255) {
         	rgb[0]=255;
-        }
-        if(rgb[1]<0) {
+        	}
+        	if(rgb[1]<0) {
         	rgb[1]=0;
-        }
-        else if(rgb[1]>255) {
+        	}
+        	else if(rgb[1]>255) {
         	rgb[1]=255;
-        }
-        if(rgb[2]<0) {
+        	}
+        	if(rgb[2]<0) {
         	rgb[0]=0;
-        }
-        else if(rgb[0]>255) {
+        	}
+        	else if(rgb[0]>255) {
         	rgb[0]=255;
-        }
-        //only for testing
-        //System.out.println(rgb[0]);
-        //System.out.println(rgb[1]);
-        //System.out.println(rgb[2]);
+        	}
+        	//only for testing
+        	//System.out.println(rgb[0]);
+        	//System.out.println(rgb[1]);
+        	//System.out.println(rgb[2]);
         
-        Color color=new Color(rgb[0],rgb[1],rgb[2]);
+        	Color color=new Color(rgb[0],rgb[1],rgb[2]);
 		g2.setPaint(color);//阴影区颜色设置
 		g2.fill(shape);
 		
@@ -201,8 +201,8 @@ public class ShadowShape {
 	class DShape{
 		private double f_x;
 		private double f_y;
-		private Shape shapef;
-		private Shape shaper;
+		private Shape shapef;  //正确剪裁与阴影区形状
+		private Shape shaper;  //旋转后剪裁形状
 		public void drawShape(double sh_x,double sh_y,int spin,double ratio) {
 			sh_x-=15*ratio;
 			sh_y-=15*ratio;
@@ -253,7 +253,9 @@ public class ShadowShape {
 		}
 		
 		public Shape falseShape(double sh_x,double sh_y,double pic_x,double pic_y,double ratio) {
-			
+			/*
+			画假的阴影区形状
+			*/
 			Random r=new Random();//设立假值
 			f_x=r.nextDouble()*(pic_x-200*ratio)+50*ratio;
 			f_y=r.nextDouble()*(pic_y-200*ratio)+50*ratio;
