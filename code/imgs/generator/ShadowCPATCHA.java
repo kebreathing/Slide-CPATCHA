@@ -6,6 +6,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
@@ -18,8 +20,15 @@ public class ShadowCPATCHA {
 
 	public static void shadowGeneratorDir(String dirPathIn,
 															String filePathOutShadow,
-															String filePathOutPiece) throws IOException{
+															String filePathOutPiece,
+															String filePathcomponent) throws IOException{
 		// read the files of the directory
+		// If the input is null, set to default
+		if(dirPathIn == null || dirPathIn.length() == 0) {
+			System.out.println("First Parameter [dirPathIn] cannot be null");
+			return;
+		}
+
 		File directory = new File(dirPathIn);
 		if(directory.isDirectory()){
 			for(File f : directory.listFiles()){
@@ -29,7 +38,7 @@ public class ShadowCPATCHA {
 					public void run(){
 						System.err.println("Running Thread...");
 						try{
-							shadowGenerator(dirPathIn + fileName, filePathOutShadow, filePathOutPiece);
+							shadowGenerator(dirPathIn + fileName, filePathOutShadow, filePathOutPiece, filePathcomponent);
 						} catch(IOException e){
 							e.printStackTrace();
 						}
@@ -37,7 +46,7 @@ public class ShadowCPATCHA {
 				}).start();
 			}
 		} else {
-			shadowGenerator(dirPathIn, filePathOutShadow, filePathOutPiece);
+			shadowGenerator(dirPathIn, filePathOutShadow, filePathOutPiece, filePathcomponent);
 		}
 	}
 
@@ -48,14 +57,15 @@ public class ShadowCPATCHA {
 	*/
 	public static void shadowGenerator(String filePathIn,
 													String filePathOutShadow,
-													String filePathOutPiece) throws IOException{
-		// If the input is null, set to default
-		if(filePathIn == null || filePathIn.length() == 0)
-			filePathIn = Config.picPath;
+													String filePathOutPiece,
+													String filePathcomponent) throws IOException{
+		// if the path is null
 		if(filePathOutShadow == null || filePathOutShadow.length() == 0)
 			filePathOutShadow = Config.piecePath;
 		if(filePathOutPiece == null || filePathOutPiece.length() == 0)
 			filePathOutPiece = Config.shadowPath;
+		if(filePathcomponent == null || filePathcomponent.length() == 0)
+			filePathcomponent = Config.componentPath;
 
 		// if the last letter is not /, append a /
 		filePathOutShadow += (filePathOutShadow.charAt(filePathOutShadow.length()-1) == '/') ? "" : "/";
@@ -71,7 +81,8 @@ public class ShadowCPATCHA {
 	  File pieceFile = new File(filePathOutPiece + imgName + "-00." + Config.picPieceType);
 		// Rotated Piece
 	  File pieceRotatedFile = new File(filePathOutPiece + imgName + "-01." + Config.picPieceType);
-
+		// Record File
+		File componentFile = new File(filePathcomponent + imgName + ".config" );
 		// Read the Image file
 	  BufferedImage baseImg = ImageIO.read(baseFile);
 
@@ -132,6 +143,16 @@ public class ShadowCPATCHA {
 		g.fill(shapeFalse);
 		g.dispose();
 		ImageIO.write(baseImg, Config.picType, shadowFile);
+
+		// Record the information
+		componentFile.createNewFile();
+		BufferedWriter writer = new BufferedWriter(new FileWriter(componentFile));
+		writer.write("Origin:" + baseFile.getPath() + "\n");
+		writer.write("Shadow:" + shadowFile.getPath() + "\n");
+		writer.write("Piece:" + pieceFile.getPath() + "\n");
+		writer.write("PieceRotated:" + pieceRotatedFile.getPath() + "\n");
+		writer.flush();
+		writer.close();
 		System.out.println("Image [ " + filePathIn + " ]: All the work has been done.");
 	}
 
@@ -168,7 +189,7 @@ public class ShadowCPATCHA {
 	* Cut the image to fit the rect size
 	*
 	*/
-	public static BufferedImage modifyPieceSize(Rectangle rect, String imgSuffix, File imgSavFile) throws IOException{
+	private static BufferedImage modifyPieceSize(Rectangle rect, String imgSuffix, File imgSavFile) throws IOException{
 		FileInputStream fis = new FileInputStream(imgSavFile);
 		Iterator<ImageReader> it = ImageIO.getImageReadersByFormatName(imgSuffix);
 		ImageReader reader = (ImageReader) it.next();
@@ -185,13 +206,10 @@ public class ShadowCPATCHA {
 
 	public static void main(String[] args) {
 
-		String a ="F:/git4elearning/Slide-CPATCHA/code/imgs/pics/pic-00000300.jpg";
-		String b ="F:/git4elearning/Slide-CPATCHA/code/imgs/pieces/";
-		String c ="F:/git4elearning/Slide-CPATCHA/code/imgs/shadows/";
-		String d ="F:/git4elearning/Slide-CPATCHA/code/imgs/pics/";
+		// String a ="F:/git4elearning/Slide-CPATCHA/code/imgs/pics/pic-00000300.jpg";
 		try {
 			// new ShadowCPATCHA().shadowGenerator(a,b,c);
-			ShadowCPATCHA.shadowGeneratorDir(d, b, c);
+			ShadowCPATCHA.shadowGeneratorDir(Config.picPath, null, null, null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

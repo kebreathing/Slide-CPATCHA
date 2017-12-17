@@ -13,10 +13,10 @@ public class Config {
   public static String picPieceType = "png";
 
   // 默认地址
-  public static String picPath = "./pics/";
-  public static String piecePath = "./pieces/";
-  public static String shadowPath = "./shadows/";
-
+  public static String picPath = "../pics/";
+  public static String piecePath = "../pieces/";
+  public static String shadowPath = "../shadows/";
+  public static String componentPath ="../components/";
 
   public static String getPicPath(String picName){
     return picPath + picName;
