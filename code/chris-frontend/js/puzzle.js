@@ -9,6 +9,22 @@ var mouselistener = new Array();
 var thumbnails_onoff = new Array(false, false, false, false);
 var drag_status = false;
 
+Date.prototype.Format = function (fmt) { //author: meizz
+    var o = {
+        "M+": this.getMonth() + 1, //月份
+        "d+": this.getDate(), //日
+        "h+": this.getHours(), //小时
+        "m+": this.getMinutes(), //分
+        "s+": this.getSeconds(), //秒
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+        "S": this.getMilliseconds() //毫秒
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+}
+
 // 鼠标日志监听
 function MouseListener(type, date, detailed) {
   var json = {
@@ -31,7 +47,7 @@ function ThumbnailsListener() {
       // 为了程序逻辑的完整性，还是要检查一下的
       return;
     }
-    var date = new Date()
+    var date = new Date().Format('hh:mm:ss')
     var type = 'SelectThumbnails'
     var detailed = '';
 
@@ -61,7 +77,16 @@ function ThumbnailsListener() {
     }
 
     MouseListener(type, date, detailed)
+    textAppender(date, type, detailed)
   })
+}
+
+function textAppender(date, etype, detailed){
+  $("#textShower").append('<label>'
+            +'<font size="1">[' + date + '] '
+            + etype + ': '
+            + detailed
+            + '</font></label></br>');
 }
 
 function dragListener() {
@@ -69,7 +94,8 @@ function dragListener() {
     containment: '#container',
     start: function(){
       drag_status = true;
-      console.log('Drag start')
+      textAppender((new Date()).Format('hh:mm:ss'), 'MouseDown', 'Drag start.')
+      // console.log('Drag start')
     },
     drag: function(){
       console.log('drag...')
@@ -77,8 +103,7 @@ function dragListener() {
     },
     stop: function(){
       drag_status = false;
-      console.log('stop...')
-
+      textAppender((new Date()).Format('hh:mm:ss'), 'MouseRelease', 'Drag End.')
       // TODO: 记录鼠标结束事件，并且向服务器发送认证请求
     }
   });
