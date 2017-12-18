@@ -1,0 +1,151 @@
+/**
+* author: Chris Long
+* Created at 2017/12/12 22:30
+* For Assignment of ISE
+*/
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+td {
+  text-align: center;
+}
+.container {
+  margin: 0 auto;
+  position: relative;
+  top: 10%;
+  width: 90%;
+  height: 70%;
+  background-color: grey;
+}
+
+.left-container {
+  float: left;
+  width: 20%;
+  height: 100%;
+  background-color: #616161;
+}
+
+.thumbnails-container {
+  margin: 0 auto;
+  margin-top: 20px;
+  width: 90%;
+  height: 95%;
+  background-color: white;
+  text-align: center;
+}
+
+.thumbnails {
+  width: 100px;
+  height: 100px;
+}
+
+
+.thumbnails-default {
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.selected {
+  z-index: 1;
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  display: none;
+}
+
+
+.subpuzzle {
+  width: 120px;
+  height: 120px;
+
+}
+
+.tips {
+  margin-top: 3%;
+}
+
+.right-container {
+  float: left;
+  width: 60%;
+  height: 100%;
+  background-color: #9E9E9E;
+}
+
+.puzzle-container {
+  margin: 0 auto;
+  margin-top: 20px;
+  width: 90%;
+  height: 95%;
+  background-color: white;
+
+}
+
+.puzzle-container img {
+  width: 800px;
+  height: 600px;
+  margin: 0 auto;
+}
+
+.img-container {
+  text-align: center;
+  margin: 0 auto;
+}
+.text-container {
+  float: left;
+  width: 20%;
+  height: 100%;
+  background-color: #616161;
+}
+
+.text-show {
+  margin: 0 auto;
+  margin-top: 20px;
+  width: 90%;
+  height: 95%;
+  background-color: white;
+}
+
+button {
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #616161;
+  border: none;
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 28px;
+  padding: 20px;
+  width: 200px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+}
+
+button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+button span:after {
+  content: '»';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+button:hover span {
+  padding-right: 25px;
+}
+
+button:hover span:after {
+  opacity: 1;
+  right: 0;
+}
