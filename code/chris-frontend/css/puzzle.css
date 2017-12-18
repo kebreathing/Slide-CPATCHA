@@ -60,8 +60,10 @@ td {
 
 
 .subpuzzle {
-  width: 120px;
-  height: 120px;
+  width: 60px;
+  height: 60px;
+  /* width: 120px;
+  height: 120px; */
 
 }
 
@@ -82,12 +84,16 @@ td {
   width: 90%;
   height: 95%;
   background-color: white;
-
+  justify-content: center;
+  align-items: center;
+  display: -webkit-flex;
 }
 
 .puzzle-container img {
-  width: 800px;
-  height: 600px;
+  width: 400px;
+  height: 300px;
+  /* width: 800px;
+  height: 600px; */
   margin: 0 auto;
 }
 

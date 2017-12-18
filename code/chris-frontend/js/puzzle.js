@@ -105,6 +105,8 @@ function dragListener() {
       drag_status = false;
       textAppender((new Date()).Format('hh:mm:ss'), 'MouseRelease', 'Drag End.')
       // TODO: 记录鼠标结束事件，并且向服务器发送认证请求
+      alert('You released the mouse to verified whether your are robot.')
+      window.location.reload()
     }
   });
 }
