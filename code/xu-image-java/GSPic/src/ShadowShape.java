@@ -76,9 +76,11 @@ public class ShadowShape {
 		fS.drawShape(sh_x, sh_y, spin,ratio);
 		shape=fS.getRightShape();
 		shapeSwitch=fS.getFalseShape();
+		Shape shapes=fS.getSplitShape();
 
 		//画出假的阴影区形状,结果为falseShape
 		falseShape = fS.falseShape(sh_x, sh_y, pic_x, pic_y,ratio);
+		Shape shapesf = fS.getSplitfShape();
 
 		//将剪裁图形，shape形状之外的部分设置为透明
 		BufferedImage bi1 = ImageIO.read(new File(baseFilePathIn));
@@ -158,51 +160,72 @@ public class ShadowShape {
 
 		//设置阴影颜色
 		int res=0;
-		res = bi.getRGB((int)(70*ratio), (int)(70*ratio)) & 0xFFFFFF;  //change ARGB into RGB,& 0xFFFFFF
+		int sp_x=r.nextInt(80)+15;//scale is 50——pic_x-150
+		int sp_y=r.nextInt(80)+15;
+		res = bi.getRGB((int)(sp_x*ratio), (int)(sp_y*ratio)) & 0xFFFFFF;   //change ARGB into RGB,& 0xFFFFFF
 		//System.out.println(res);
-		int[] rgb = new int [3]; //set RGB, value of color
-        	rgb[0] = (res & 0xff0000) >> 16;
-        	rgb[1] = (res & 0xff00) >> 8;
-        	rgb[2] = (res & 0xff);
-
-        	if(rgb[0]<0) {
-        	rgb[0]=0;
-        	}
-        	else if(rgb[0]>255) {
-        	rgb[0]=255;
-        	}
-        	if(rgb[1]<0) {
-        	rgb[1]=0;
-        	}
-        	else if(rgb[1]>255) {
-        	rgb[1]=255;
-        	}
-        	if(rgb[2]<0) {
-        	rgb[0]=0;
-        	}
-        	else if(rgb[0]>255) {
-        	rgb[0]=255;
-        	}
-        	//only for testing
-        	//System.out.println(rgb[0]);
-        	//System.out.println(rgb[1]);
-        	//System.out.println(rgb[2]);
-
-        	Color color=new Color(rgb[0],rgb[1],rgb[2]);
+		Color color=setColors(res);
 		g2.setPaint(color);//阴影区颜色设置
 		g2.fill(shape);
 
 		//打上假的阴影区
 		g2.fill(falseShape);
 		g2.dispose();
+		
+		//将shape进行拆分
+		//15*ratio+sh_x,15*ratio+sh_y,80*ratio,80*ratio
+		sp_x=r.nextInt(80)+15;//scale is 50——pic_x-150
+		sp_y=r.nextInt(80)+15;
+		res = bi.getRGB((int)(sp_x*ratio), (int)(sp_y*ratio)) & 0xFFFFFF;  //change ARGB into RGB,& 0xFFFFFF
+		Color colors=setColors(res);
+		//System.out.println(res);
+		Graphics2D gs = bi1.createGraphics();
+		float alpha1=0.4f;
+		AlphaComposite cSplit=AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha1);
+		gs.setComposite(cSplit);
+		gs.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);   //使用 setRenderingHint 设置抗锯齿
+		gs.setPaint(colors);
+		gs.fill(shapes);
+		gs.fill(shapesf);
+		
 		ImageIO.write(SImg, picType, shadowFile);
 	}
 
+	private Color setColors(int res) {
+		int[] rgb = new int [3];
+		//System.out.println(res);
+        	rgb[0] = (res & 0xff0000) >> 16;
+        	rgb[1] = (res & 0xff00) >> 8;
+        	rgb[2] = (res & 0xff);
+       		if(rgb[0]<0) {
+        		rgb[0]=0;
+        	}
+        	else if(rgb[0]>255) {
+        		rgb[0]=255;
+        	}
+        	if(rgb[1]<0) {
+        		rgb[1]=0;
+        	}
+        	else if(rgb[1]>255) {
+        		rgb[1]=255;
+        	}
+        	if(rgb[2]<0) {
+        		rgb[0]=0;
+        	}
+        	else if(rgb[0]>255) {
+        		rgb[0]=255;
+        	}
+        	Color colors=new Color(rgb[0],rgb[1],rgb[2]);
+        	return colors;
+	}
+	
 	class DShape{
 		private double f_x;
 		private double f_y;
 		private Shape shapef;  //正确剪裁与阴影区形状
 		private Shape shaper;  //旋转后剪裁形状
+		private Shape shapeSplit;//正确阴影区的条形区
+		private Shape shapeSplitf;//错误阴影区的条形区
 		public void drawShape(double sh_x,double sh_y,int spin,double ratio) {
 			sh_x-=15*ratio;
 			sh_y-=15*ratio;
@@ -242,6 +265,7 @@ public class ShadowShape {
 				break;
 			default:
 			}
+			shapeSplit=drawSplit(sh_x,sh_y,spin,ratio);
 		}
 
 		public Shape getRightShape() {
@@ -252,6 +276,42 @@ public class ShadowShape {
 			return shapef;
 		}
 
+		public Shape getSplitShape() {
+			return shapeSplit;
+		}
+		
+		public Shape getSplitfShape() {
+			return shapeSplitf;
+		}
+		
+		public Shape drawSplit(double sh_x,double sh_y,int spin,double ratio) {
+			Shape shapesp1 = new Rectangle2D.Double(15*ratio+sh_x, 40*ratio+sh_y, 80*ratio, 30*ratio);//中间的拆分形状，横着
+			Shape shapesp2 = new Rectangle2D.Double(40*ratio+sh_x, 15*ratio+sh_y, 30*ratio, 80*ratio);//中间的拆分形状，竖着
+			Area shapes2 = new Area(new Arc2D.Double(25*ratio+sh_x, 0+sh_y, 30*ratio, 30*ratio,0,90,Arc2D.PIE));
+			Area shapes3 = new Area(new Arc2D.Double(80*ratio+sh_x, 25*ratio+sh_y, 30*ratio, 30*ratio, 270, 90,Arc2D.PIE));
+			Area shapes4 = new Area(new Arc2D.Double(0+sh_x, 55*ratio+sh_y, 30*ratio, 30*ratio, 90, 90,Arc2D.PIE));//左
+			Area shapes5 = new Area(new Arc2D.Double(55*ratio+sh_x, 80*ratio+sh_y, 30*ratio, 30*ratio, 180, 90,Arc2D.PIE));//下
+			Area c;
+			Shape shapes = null;
+			switch(spin) {
+			case 0:
+				c=new Area(shapesp1);
+				c.add(shapes3);
+				c.add(shapes4);
+				shapes=(Shape)c;
+				break;
+			case 1:
+				c=new Area(shapesp2);
+				c.add(shapes2);
+				c.add(shapes5);
+				shapes=(Shape)c;
+				break;
+			default:
+			}
+			
+			return shapes;
+			
+		}
 		public Shape falseShape(double sh_x,double sh_y,double pic_x,double pic_y,double ratio) {
 			/*
 			画假的阴影区形状
@@ -290,6 +350,7 @@ public class ShadowShape {
 			default:
 			}
 			falseShape=(Shape)b;
+			shapeSplitf=drawSplit(f_x,f_y,spinf,ratio);
 			return falseShape;
 		}
 	}
