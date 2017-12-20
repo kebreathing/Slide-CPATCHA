@@ -32,11 +32,12 @@ def login():
     else:
         return 'I\'s POST request.'
 
+# Allow to set the list normal
 @app.route('/hello')
 @app.route('/hello/<name>')
 def helo_name(name=None):
     # python will look for templates folder
-    return render_template('hello.html', name=name)
+    return render_template('hello.html', name=name, names=['chris', 'dhris'])
 
 # user urf_for to generate URL
 # with app.test_request_context():
