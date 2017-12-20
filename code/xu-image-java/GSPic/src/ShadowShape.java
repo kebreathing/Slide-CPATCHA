@@ -20,9 +20,9 @@ public class ShadowShape {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		String a="D:\\slidePic\\PICS\\pic-00000100.jpg";
-		String b="D:\\slidePic\\SHADOW/pic-00001001.";
-		String c="D:\\slidePic\\PIECE/pic-00001000-1.";
+		String a="F:/git4elearning/Slide-CPATCHA/code/xu-image-java/slidePic/PICS/pic-00001000.jpg";
+		String b="F:/git4elearning/Slide-CPATCHA/code/xu-image-java/slidePic/SHADOW/pic-000010011.";
+		String c="F:/git4elearning/Slide-CPATCHA/code/xu-image-java/slidePic/pic-00001000-11.";
 		try {
 			new ShadowShape().MShadowShape(a,b,c);
 		} catch (IOException e) {
