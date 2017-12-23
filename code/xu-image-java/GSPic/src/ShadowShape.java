@@ -36,8 +36,14 @@ public class ShadowShape {
 	private Shape falseShape;
 	private int rule;
 	private float alpha;
-	private double sh_x;   //阴影区x坐标
-	private double sh_y;   //阴影区y坐标
+	private double sh_x;   //阴影区左上角x坐标
+	private double sh_y;   //阴影区左上角y坐标
+	private double ru_x;   //阴影区右上角x坐标
+	private double ru_y;   //阴影区右上角y坐标
+	private double ld_x;   //阴影区左下角x坐标
+	private double ld_y;   //阴影区左下角y坐标
+	private double rd_x;   //阴影区右下角x坐标
+	private double rd_y;   //阴影区右下角y坐标
 	private double ratio;  //比例参数，对不同图片，尤其是高清图片可以调整阴影区的大小
 	//private String baseFilePathIn="D:\\javaprojects\\pictures\\8761.jpg"; //图片读入路径
 	//private String baseFilePathOutShadow="D:\\javaprojects\\pictures\\shadow/b."; //带阴影图片输出路径及名称
@@ -71,6 +77,13 @@ public class ShadowShape {
 		sh_x=r.nextDouble()*(pic_x-200*ratio)+50*ratio;//scale is 50——pic_x-150
 		sh_y=r.nextDouble()*(pic_y-200*ratio)+50*ratio;//scale is 50——pic_y-150
 		spin=r.nextInt(2);
+		
+		ru_x = sh_x+110*ratio;   //阴影区右上角x坐标
+		ru_y = sh_y;   //阴影区右上角y坐标
+		ld_x = sh_x;   //阴影区左下角x坐标
+		ld_y = sh_y+110*ratio;   //阴影区左下角y坐标
+		rd_x = sh_x+110*ratio;   //阴影区右下角x坐标
+		rd_y = sh_y+110*ratio;   //阴影区右下角y坐标
 		
 		//System.out.println(spin);//only for testing
 		DShape fS=new DShape();
@@ -125,7 +138,7 @@ public class ShadowShape {
 		int R_x=(int)(sh_x-15*ratio);
 		int R_y=(int)(sh_y-15*ratio);
 		
-		Rectangle rect = new Rectangle(R_x, R_y, (int)(120*ratio), (int)(120*ratio));//定义一个矩形    
+		Rectangle rect = new Rectangle(R_x, R_y, (int)(110*ratio), (int)(110*ratio));//定义一个矩形    
 		param.setSourceRegion(rect);  //进行剪裁
 		BufferedImage bi = reader.read(0,param);//提供一个 BufferedImage，将其用作解码像素数据的目标。   
 		
